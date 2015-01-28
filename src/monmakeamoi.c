@@ -6,6 +6,13 @@
 
 typedef char (*translate_fun)(char);
 
+static unsigned long int str_to_ulong(const char* nptr)
+    {
+    char* p2;
+    unsigned long N=strtoul(nptr, &p2,10);
+    return N;
+    }
+
 static char *
 _func_translate(char *o, char **argv,translate_fun _fun)
 {
@@ -83,7 +90,7 @@ char* func_md5 (char *o, char **argv, const char *funcname UNUSED)
 }
 
 
- char *
+char *
 func_dichotomy(char *o, char **argv, const char *funcname)
 {
   const char *iter1 = argv[0];
@@ -123,4 +130,56 @@ func_dichotomy(char *o, char **argv, const char *funcname)
 
   return o;
 }
+
+
+char *
+func_sublist(char *o, char **argv, const char *funcname)
+{
+  unsigned int idx = 0;
+  unsigned int count = 0;
+
+  int doneany = 0;
+  const char *p;
+  unsigned int len;
+  
+  unsigned int array_start = 0;
+  unsigned int array_count = INT_MAX;
+  if(argv[1]!=0)
+    {
+    array_start = str_to_ulong(argv[1]);
+    if(argv[2]!=0)
+        {
+        array_count = str_to_ulong(argv[2]);
+        }
+    }
+  const char *iter1 = argv[0];
+
+  
+  if(array_count==0) return o;
+  
+  /* Find the maximum number of words we'll have.  */
+  while ((p = find_next_token (&iter1,  &len)) != 0)
+    {
+    if( idx >= array_start )
+        {
+        if( idx < array_start + array_count )
+            {
+            o = variable_buffer_output (o, p, len);
+            o = variable_buffer_output (o, " ", 1);
+            doneany = 1;
+            }
+        else
+            {
+            break;
+            }
+        }
+    ++idx;
+    }
+  if (doneany)
+    /* Kill last space.  */
+    --o;
+
+  return o;
+}
+
 

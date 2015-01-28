@@ -9,4 +9,11 @@ all:
 	echo "${MACHINE_CORES}"
 	echo "$(dichotomyl 1 2 3 4 5 6 7 8 9 10 11)"
 	echo "$(dichotomyr 1 2 3 4 5 6 7 8 9 10 11)"
+	echo "$(sublist 1 2 3 4 5 6 7 8 9 10 11)"
+	echo "$(sublist 1 2 3 4 5 6 7 8 9 10 11,5)"
+	echo "$(sublist 1 2 3 4 5 6 7 8 9 10 11,)"
+	echo "$(sublist 1 2 3 4 5 6 7 8 9 10 11,1,3)"
+	echo "$(sublist 1 2 3 4 5 6 7 8 9 10 11,,3)"
+	echo "$(sublist 1 2 3 4 5 6 7 8 9 10 11,1000,3)"
+	
 
