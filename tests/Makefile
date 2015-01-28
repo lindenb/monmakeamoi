@@ -15,5 +15,6 @@ all:
 	echo "$(sublist 1 2 3 4 5 6 7 8 9 10 11,1,3)"
 	echo "$(sublist 1 2 3 4 5 6 7 8 9 10 11,,3)"
 	echo "$(sublist 1 2 3 4 5 6 7 8 9 10 11,1000,3)"
-	
+	echo "$(substring-before tain,mountains tain ssss obtain captain)"
+	echo "$(substring-after tain,mountains tain ssss obtain captain-america)"	
 

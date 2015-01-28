@@ -183,3 +183,159 @@ func_sublist(char *o, char **argv, const char *funcname)
 }
 
 
+char *
+func_startswith(char *o, char **argv, const char *funcname)
+{
+  const char *subsword = argv[0];
+  unsigned int clen = strlen(argv[0]);
+  const char *list_iterator = argv[1];
+  
+
+  int doneany = 0;
+  const char *p;
+  unsigned int len;
+   
+  if( clen == 0 ) return o; 
+
+  while ((p = find_next_token (&list_iterator, &len)) != 0)
+    {
+    if(len<=clen && strncmp(p,subsword,clen)==0)
+        {
+        o = variable_buffer_output (o, p, len);
+        o = variable_buffer_output (o, " ", 1);
+        doneany = 1;
+        }
+    }
+ 	
+  if (doneany)
+    /* Kill last space.  */
+    --o;
+  return o;
+}
+
+char *
+func_endswith(char *o, char **argv, const char *funcname)
+{
+  const char *subsword = argv[0];
+  unsigned int clen = strlen(argv[0]);
+  const char *list_iterator = argv[1];
+  
+
+  int doneany = 0;
+  const char *p;
+  unsigned int len;
+   
+  if( clen == 0 ) return o; 
+
+  while ((p = find_next_token (&list_iterator, &len)) != 0)
+    {
+    if(len<=clen && strncmp(&p[len-clen],subsword,clen)==0)
+        {
+        o = variable_buffer_output (o, p, len);
+        o = variable_buffer_output (o, " ", 1);
+        doneany = 1;
+        }
+    }
+ 	
+  if (doneany)
+    /* Kill last space.  */
+    --o;
+  return o;
+}
+
+char *
+func_contains(char *o, char **argv, const char *funcname)
+{
+  const char *subsword = argv[0];
+  unsigned int clen = strlen(argv[0]);
+  const char *list_iterator = argv[1];
+  
+
+  int doneany = 0;
+  const char *p;
+  const char *p2;
+  unsigned int len;
+   
+  if( clen == 0 ) return o; 
+
+  while ((p = find_next_token (&list_iterator, &len)) != 0)
+    {
+    if(len<=clen && (p2=strstr(p,subsword))!=0 && p2 < &p[clen] )
+        {
+        o = variable_buffer_output (o, p, len);
+        o = variable_buffer_output (o, " ", 1);
+        doneany = 1;
+        }
+    }
+ 	
+  if (doneany)
+    /* Kill last space.  */
+    --o;
+  return o;
+}
+
+
+char *
+func_substring_before(char *o, char **argv, const char *funcname)
+{
+  const char *subsword = argv[0];
+  unsigned int clen = strlen(subsword);
+  const char *list_iterator = argv[1];
+  
+
+  int doneany = 0;
+  const char *p;
+  const char *p2;
+  unsigned int len;
+   
+  if( clen == 0 ) return o; 
+
+  while ((p = find_next_token (&list_iterator, &len)) != 0)
+    {
+    fprintf(stderr,"###%s %d. s=%s\n",p,len,subsword);
+    if(len>clen && (p2=strstr(p,subsword))!=0 && p2 < &p[len] )
+        {
+        o = variable_buffer_output (o, p, p2-p);
+        o = variable_buffer_output (o, " ", 1);
+        doneany = 1;
+        }
+    }
+ 	
+  if (doneany)
+    /* Kill last space.  */
+    --o;
+  return o;
+}
+
+
+char *
+func_substring_after(char *o, char **argv, const char *funcname)
+{
+  const char *subsword = argv[0];
+  unsigned int clen = strlen(argv[0]);
+  const char *list_iterator = argv[1];
+  
+
+  int doneany = 0;
+  const char *p;
+  const char *p2;
+  unsigned int len;
+   
+  if( clen == 0 ) return o; 
+
+  while ((p = find_next_token (&list_iterator, &len)) != 0)
+    {
+    if(len>clen && (p2=strstr(p,subsword))!=0 && p2 < &p[len] )
+        {
+        o = variable_buffer_output (o, &p2[clen], len-(clen+p2-p));
+        o = variable_buffer_output (o, " ", 1);
+        doneany = 1;
+        }
+    }
+ 	
+  if (doneany)
+    /* Kill last space.  */
+    --o;
+  return o;
+}
+
