@@ -1,26 +1,30 @@
-GNU_MAKE_VERSION=4.1
+export GNU_MAKE_VERSION=4.1
 
-.PHONY: all clean softcompile patch
+.PHONY: all clean patch tests  src/monmakeamoi.a
 
-all : src/monmakeamoi.a
+all : tests
+
+tests: dist/bin/monmakeamoi-${GNU_MAKE_VERSION}
+	$(realpath $<) -C tests
+
+dist/bin/monmakeamoi-${GNU_MAKE_VERSION} : src/monmakeamoi.a
+	$(MAKE) -C gnumake/make-${GNU_MAKE_VERSION}-patched make && \
+	$(MAKE) -C gnumake/make-${GNU_MAKE_VERSION}-patched install
 
 src/monmakeamoi.a : gnumake/make-${GNU_MAKE_VERSION}-patched/config.h 
-	(cd $(dir $@) && make)
-
-
-
+	$(MAKE) -C $(dir $@)
 
 #
 # ./configure if needed
 #
 gnumake/make-${GNU_MAKE_VERSION}-patched/config.h : gnumake/make-${GNU_MAKE_VERSION}-patched/Makefile.in
 	mkdir -p dist && \
-	(cd gnumake/make-${GNU_MAKE_VERSION}-patched && autoreconf && ./configure --prefix=$(realpath $(dir $(lastword $(MAKEFILE_LIST))))/dist --program-transform-name='s/make/monmakeamoi/' )
+	(cd gnumake/make-${GNU_MAKE_VERSION}-patched && autoreconf && ./configure --prefix=$(realpath $(dir $(lastword $(MAKEFILE_LIST))))/dist --program-transform-name='s/make/monmakeamoi-${GNU_MAKE_VERSION}/' )
 
 #
 # Download original GNU-Make and apply-patch if needed
 #
-$(addprefix gnumake/make-${GNU_MAKE_VERSION}-, patched/Makefile.in  original/Makefile.in) : 
+$(addprefix gnumake/make-${GNU_MAKE_VERSION}-, patched/Makefile.am  original/Makefile.am) : 
 	mkdir -p gnumake && \
 	rm -rf $(dir $@) gnumake/make-${GNU_MAKE_VERSION} && \
 	wget -O gnumake/make-${GNU_MAKE_VERSION}.tar.gz "http://ftp.gnu.org/gnu/make/make-${GNU_MAKE_VERSION}.tar.gz" && \
@@ -35,10 +39,10 @@ $(addprefix gnumake/make-${GNU_MAKE_VERSION}-, patched/Makefile.in  original/Mak
 # Create patch
 #
 patch : src/${GNU_MAKE_VERSION}.patch.tmp
-src/${GNU_MAKE_VERSION}.patch.tmp : $(addprefix gnumake/make-${GNU_MAKE_VERSION}-, patched/configure  original/configure)
+src/${GNU_MAKE_VERSION}.patch.tmp : $(addprefix gnumake/make-${GNU_MAKE_VERSION}-, patched/Makefile.am  original/Makefile.am)
 	-mkdir -p $(dir $@) && \
 	rm -f $@ \
-	$(foreach F,function.c Makefile.am, && diff -C5  $(addprefix gnumake/make-${GNU_MAKE_VERSION}-, original/${F} patched/${F} ) >> $@ ) 
+	$(foreach F,function.c Makefile.am, ; diff -C5  $(addprefix gnumake/make-${GNU_MAKE_VERSION}-, original/${F} patched/${F} ) >> $@ ) 
 	@echo "You can now copy $@ to $(basename $@)"
 
 clean:
