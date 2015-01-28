@@ -1,5 +1,5 @@
 *** gnumake/make-4.1-original/function.c	2014-10-05 18:24:51.000000000 +0200
---- gnumake/make-4.1-patched/function.c	2015-01-28 15:40:47.694971423 +0100
+--- gnumake/make-4.1-patched/function.c	2015-01-28 18:57:51.144675189 +0100
 ***************
 *** 20,29 ****
 --- 20,31 ----
@@ -29,8 +29,8 @@
   #define FUNCTION_TABLE_ENTRIES (sizeof (function_table_init) / sizeof (struct function_table_entry))
   
   
-*** gnumake/make-4.1-original/Makefile.am	2014-10-05 18:24:51.000000000 +0200
---- gnumake/make-4.1-patched/Makefile.am	2015-01-28 15:37:52.334101851 +0100
+*** gnumake/make-4.1-original/Makefile.am	2015-01-28 23:14:08.351905292 +0100
+--- gnumake/make-4.1-patched/Makefile.am	2015-01-28 18:57:51.144675189 +0100
 ***************
 *** 31,40 ****
 --- 31,42 ----
@@ -93,3 +93,132 @@
       AM_CPPFLAGS +=	$(W32INC)
   endif
   
+*** gnumake/make-4.1-original/main.c	2014-10-05 18:24:51.000000000 +0200
+--- gnumake/make-4.1-patched/main.c	2015-01-28 23:12:51.591524651 +0100
+***************
+*** 1394,1404 ****
+       and we set the -p, -i and -e switches.  Doesn't seem quite right.  */
+    decode_env_switches (STRING_SIZE_TUPLE ("MFLAGS"));
+  #endif
+  
+    decode_switches (argc, (const char **)argv, 0);
+! 
+      /* Set a variable specifying whether stdout/stdin is hooked to a TTY.  */
+  #ifdef HAVE_ISATTY
+      if (isatty (fileno (stdout)))
+        if (! lookup_variable (STRING_SIZE_TUPLE ("MAKE_TERMOUT")))
+          define_variable_cname ("MAKE_TERMOUT", TTYNAME (fileno (stdout)),
+--- 1394,1436 ----
+       and we set the -p, -i and -e switches.  Doesn't seem quite right.  */
+    decode_env_switches (STRING_SIZE_TUPLE ("MFLAGS"));
+  #endif
+  
+    decode_switches (argc, (const char **)argv, 0);
+!  
+!  /* define a new variable MAKE_JOB_SLOTS containing the value of option '-j' 
+!  
+!  */
+!  {
+!  int processor=0;
+!  int cores=0;
+!  char tmpnjobs[100];
+!  FILE* fcpuinfo;
+!  sprintf(tmpnjobs,"%d",(job_slots<0?1:job_slots));
+!  define_variable_cname ("MAKE_JOB_SLOTS", tmpnjobs,o_default, 0);
+!  
+!  fcpuinfo = fopen("/proc/cpuinfo","r");
+!  if(fcpuinfo!=NULL)
+!     {
+!     while(fgets(tmpnjobs,100,fcpuinfo)!=0)
+!         {
+!         if(strncmp(tmpnjobs,"processor",9)==0) processor++;
+!         else if(strncmp(tmpnjobs,"cpu cores",9)==0)
+!             {
+!             int ncores=0;
+!             char* colon=strchr(tmpnjobs,':');
+!             if(colon!=0) ncores=atoi(colon+1);
+!             cores=(cores==0 || cores < ncores ? ncores : cores);
+!             }
+!         }
+!     fclose(fcpuinfo);
+!     }
+!  sprintf(tmpnjobs,"%d",(processor==0?1:processor));
+!  define_variable_cname ("MACHINE_PROCESSORS", tmpnjobs,o_default, 0);
+!  sprintf(tmpnjobs,"%d",(cores==0?1:cores));
+!  define_variable_cname ("MACHINE_CORES", tmpnjobs,o_default, 0);
+!  }
+      /* Set a variable specifying whether stdout/stdin is hooked to a TTY.  */
+  #ifdef HAVE_ISATTY
+      if (isatty (fileno (stdout)))
+        if (! lookup_variable (STRING_SIZE_TUPLE ("MAKE_TERMOUT")))
+          define_variable_cname ("MAKE_TERMOUT", TTYNAME (fileno (stdout)),
+***************
+*** 1502,1511 ****
+--- 1534,1545 ----
+      argv[0] = xstrdup (concat (3, current_directory, "/", argv[0]));
+  #endif /* !__MSDOS__ */
+  #endif /* WINDOWS32 */
+  #endif
+  
++ 
++  
+    /* We may move, but until we do, here we are.  */
+    starting_directory = current_directory;
+  
+  #ifdef MAKE_JOBSERVER
+    /* If the jobserver-fds option is seen, make sure that -j is reasonable.
+***************
+*** 1541,1551 ****
+--- 1575,1587 ----
+           jobserver.  If !job_slots and we don't have a pipe, we can start
+           infinite jobs.  If we see both a pipe and job_slots >0 that means the
+           user set -j explicitly.  This is broken; in this case obey the user
+           (ignore the jobserver pipe for this make) but print a message.
+           If we've restarted, we already printed this the first time.  */
++    
+  
++    
+        if (job_slots > 0)
+          {
+            if (! restarts)
+              O (error, NILF,
+                 _("warning: -jN forced in submake: disabling jobserver mode."));
+***************
+*** 1588,1598 ****
+            free (jobserver_fds);
+            jobserver_fds = 0;
+          }
+      }
+  #endif
+! 
+    /* The extra indirection through $(MAKE_COMMAND) is done
+       for hysterical raisins.  */
+  #ifdef VMS
+    define_variable_cname("MAKE_COMMAND", vms_command(argv[0]), o_default, 0);
+  #else
+--- 1624,1634 ----
+            free (jobserver_fds);
+            jobserver_fds = 0;
+          }
+      }
+  #endif
+!    
+    /* The extra indirection through $(MAKE_COMMAND) is done
+       for hysterical raisins.  */
+  #ifdef VMS
+    define_variable_cname("MAKE_COMMAND", vms_command(argv[0]), o_default, 0);
+  #else
+***************
+*** 1961,1970 ****
+--- 1997,2007 ----
+      /* If we've disabled builtin variables, get rid of them.  */
+      if (no_builtin_variables_flag && ! old_builtin_variables_flag)
+        undefine_default_variables ();
+    }
+  
++  
+  #if defined (__MSDOS__) || defined (__EMX__) || defined (VMS)
+    if (job_slots != 1
+  # ifdef __EMX__
+        && _osmode != OS2_MODE /* turn off -j if we are in DOS mode */
+  # endif

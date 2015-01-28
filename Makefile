@@ -17,7 +17,7 @@ src/monmakeamoi.a : gnumake/make-${GNU_MAKE_VERSION}-patched/config.h
 #
 # ./configure if needed
 #
-gnumake/make-${GNU_MAKE_VERSION}-patched/config.h : gnumake/make-${GNU_MAKE_VERSION}-patched/Makefile.in
+gnumake/make-${GNU_MAKE_VERSION}-patched/config.h : gnumake/make-${GNU_MAKE_VERSION}-patched/Makefile.am
 	mkdir -p dist && \
 	(cd gnumake/make-${GNU_MAKE_VERSION}-patched && autoreconf && ./configure --prefix=$(realpath $(dir $(lastword $(MAKEFILE_LIST))))/dist --program-transform-name='s/make/monmakeamoi-${GNU_MAKE_VERSION}/' )
 
@@ -42,7 +42,7 @@ patch : src/${GNU_MAKE_VERSION}.patch.tmp
 src/${GNU_MAKE_VERSION}.patch.tmp : $(addprefix gnumake/make-${GNU_MAKE_VERSION}-, patched/Makefile.am  original/Makefile.am)
 	-mkdir -p $(dir $@) && \
 	rm -f $@ \
-	$(foreach F,function.c Makefile.am, ; diff -C5  $(addprefix gnumake/make-${GNU_MAKE_VERSION}-, original/${F} patched/${F} ) >> $@ ) 
+	$(foreach F,function.c Makefile.am main.c, ; diff -C5  $(addprefix gnumake/make-${GNU_MAKE_VERSION}-, original/${F} patched/${F} ) >> $@ ) 
 	@echo "You can now copy $@ to $(basename $@)"
 
 clean:

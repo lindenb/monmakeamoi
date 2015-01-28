@@ -35,3 +35,7 @@ jeter*
 *jeter
 dist
 gnumake
+src/lex.monmath.c
+src/monmath.output
+src/monmath.tab.c
+src/monmath.tab.h
