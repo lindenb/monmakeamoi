@@ -1,0 +1,395 @@
+diff -r -C 5 -x Makefile.in -x '*.texi' -x stamp-vti -x '*.m4' -x configure ./build_w32.bat ../mine/build_w32.bat
+*** ./build_w32.bat	2013-10-06 01:12:18.000000000 +0200
+--- ../mine/build_w32.bat	2015-01-28 11:09:41.244699045 +0100
+***************
+*** 142,151 ****
+--- 142,153 ----
+  echo WinDebug\misc.obj >>link.dbg
+  cl.exe /nologo /MT /W4 /GX /Zi /YX /Od /I . /I glob /I w32/include /D _DEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinDebug/ /Fp.\WinDebug/%make%.pch /Fo.\WinDebug/ /Fd.\WinDebug/%make%.pdb /c ar.c
+  echo WinDebug\ar.obj >>link.dbg
+  cl.exe /nologo /MT /W4 /GX /Zi /YX /Od /I . /I glob /I w32/include /D _DEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinDebug/ /Fp.\WinDebug/%make%.pch /Fo.\WinDebug/ /Fd.\WinDebug/%make%.pdb /c function.c
+  echo WinDebug\function.obj >>link.dbg
++ cl.exe /nologo /MT /W4 /GX /Zi /YX /Od /I . /I glob /I w32/include /D _DEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinDebug/ /Fp.\WinDebug/%make%.pch /Fo.\WinDebug/ /Fd.\WinDebug/%make%.pdb /c monmakeamoi.c
++ echo WinDebug\monmakeamoi.obj >>link.dbg
+  cl.exe /nologo /MT /W4 /GX /Zi /YX /Od /I . /I glob /I w32/include /D _DEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinDebug/ /Fp.\WinDebug/%make%.pch /Fo.\WinDebug/ /Fd.\WinDebug/%make%.pdb /c vpath.c
+  echo WinDebug\vpath.obj >>link.dbg
+  cl.exe /nologo /MT /W4 /GX /Zi /YX /Od /I . /I glob /I w32/include /D _DEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinDebug/ /Fp.\WinDebug/%make%.pch /Fo.\WinDebug/ /Fd.\WinDebug/%make%.pdb /c implicit.c
+  echo WinDebug\implicit.obj >>link.dbg
+  cl.exe /nologo /MT /W4 /GX /Zi /YX /Od /I . /I glob /I w32/include /D _DEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinDebug/ /Fp.\WinDebug/%make%.pch /Fo.\WinDebug/ /Fd.\WinDebug/%make%.pdb /c loadapi.c
+***************
+*** 166,176 ****
+  cl.exe /nologo /MT /W4 /GX /Zi /YX /Od %GUILECFLAGS%% /I . /I glob /I w32/include /D _DEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinDebug/ /Fp.\WinDebug/%make%.pch /Fo.\WinDebug/ /Fd.\WinDebug/%make%.pdb /c guile.c
+  echo WinDebug\guile.obj >>link.dbg
+  :LinkDbg
+  echo off
+  echo "Linking WinDebug/%make%.exe"
+! rem link.exe %GUILELIBS% kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib w32\subproc\windebug\subproc.lib /NOLOGO /SUBSYSTEM:console /INCREMENTAL:yes /PDB:.\WinDebug/%make%.pdb /DEBUG /OUT:.\WinDebug/%make%.exe .\WinDebug/variable.obj  .\WinDebug/rule.obj  .\WinDebug/remote-stub.obj  .\WinDebug/commands.obj  .\WinDebug/file.obj  .\WinDebug/getloadavg.obj  .\WinDebug/default.obj  .\WinDebug/signame.obj  .\WinDebug/expand.obj  .\WinDebug/dir.obj  .\WinDebug/main.obj  .\WinDebug/getopt1.obj  .\WinDebug/job.obj  .\WinDebug/output.obj  .\WinDebug/read.obj  .\WinDebug/version.obj  .\WinDebug/getopt.obj  .\WinDebug/arscan.obj  .\WinDebug/remake.obj  .\WinDebug/hash.obj  .\WinDebug/strcache.obj  .\WinDebug/misc.obj  .\WinDebug/ar.obj  .\WinDebug/function.obj  .\WinDebug/vpath.obj  .\WinDebug/implicit.obj  .\WinDebug/dirent.obj  .\WinDebug/glob.obj  .\WinDebug/fnmatch.obj  .\WinDebug/pathstuff.obj
+  echo %GUILELIBS% kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib w32\subproc\windebug\subproc.lib >>link.dbg
+  link.exe /NOLOGO /SUBSYSTEM:console /INCREMENTAL:yes /PDB:.\WinDebug/%make%.pdb /DEBUG /OUT:.\WinDebug/%make%.exe @link.dbg
+  if not exist .\WinDebug/%make%.exe echo "WinDebug build failed"
+  if exist .\WinDebug/%make%.exe echo "WinDebug build succeeded!"
+  if not exist .\WinRel\nul mkdir .\WinRel
+--- 168,178 ----
+  cl.exe /nologo /MT /W4 /GX /Zi /YX /Od %GUILECFLAGS%% /I . /I glob /I w32/include /D _DEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinDebug/ /Fp.\WinDebug/%make%.pch /Fo.\WinDebug/ /Fd.\WinDebug/%make%.pdb /c guile.c
+  echo WinDebug\guile.obj >>link.dbg
+  :LinkDbg
+  echo off
+  echo "Linking WinDebug/%make%.exe"
+! rem link.exe %GUILELIBS% kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib w32\subproc\windebug\subproc.lib /NOLOGO /SUBSYSTEM:console /INCREMENTAL:yes /PDB:.\WinDebug/%make%.pdb /DEBUG /OUT:.\WinDebug/%make%.exe .\WinDebug/variable.obj  .\WinDebug/rule.obj  .\WinDebug/remote-stub.obj  .\WinDebug/commands.obj  .\WinDebug/file.obj  .\WinDebug/getloadavg.obj  .\WinDebug/default.obj  .\WinDebug/signame.obj  .\WinDebug/expand.obj  .\WinDebug/dir.obj  .\WinDebug/main.obj  .\WinDebug/getopt1.obj  .\WinDebug/job.obj  .\WinDebug/output.obj  .\WinDebug/read.obj  .\WinDebug/version.obj  .\WinDebug/getopt.obj  .\WinDebug/arscan.obj  .\WinDebug/remake.obj  .\WinDebug/hash.obj  .\WinDebug/strcache.obj  .\WinDebug/misc.obj  .\WinDebug/ar.obj  .\WinDebug/function.obj monmakeamoi.obj .\WinDebug/vpath.obj  .\WinDebug/implicit.obj  .\WinDebug/dirent.obj  .\WinDebug/glob.obj  .\WinDebug/fnmatch.obj  .\WinDebug/pathstuff.obj
+  echo %GUILELIBS% kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib w32\subproc\windebug\subproc.lib >>link.dbg
+  link.exe /NOLOGO /SUBSYSTEM:console /INCREMENTAL:yes /PDB:.\WinDebug/%make%.pdb /DEBUG /OUT:.\WinDebug/%make%.exe @link.dbg
+  if not exist .\WinDebug/%make%.exe echo "WinDebug build failed"
+  if exist .\WinDebug/%make%.exe echo "WinDebug build succeeded!"
+  if not exist .\WinRel\nul mkdir .\WinRel
+***************
+*** 221,230 ****
+--- 223,234 ----
+  echo WinRel\misc.obj >>link.rel
+  cl.exe /nologo /MT /W4 /GX /YX /O2 /I . /I glob /I w32/include /D NDEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinRel/ /Fp.\WinRel/%make%.pch /Fo.\WinRel/ /c ar.c
+  echo WinRel\ar.obj >>link.rel
+  cl.exe /nologo /MT /W4 /GX /YX /O2 /I . /I glob /I w32/include /D NDEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinRel/ /Fp.\WinRel/%make%.pch /Fo.\WinRel/ /c function.c
+  echo WinRel\function.obj >>link.rel
++ cl.exe /nologo /MT /W4 /GX /YX /O2 /I . /I glob /I w32/include /D NDEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinRel/ /Fp.\WinRel/%make%.pch /Fo.\WinRel/ /c monmakeamoi.c
++ echo WinRel\monmakeamoi.obj >>link.rel
+  cl.exe /nologo /MT /W4 /GX /YX /O2 /I . /I glob /I w32/include /D NDEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinRel/ /Fp.\WinRel/%make%.pch /Fo.\WinRel/ /c vpath.c
+  echo WinRel\vpath.obj >>link.rel
+  cl.exe /nologo /MT /W4 /GX /YX /O2 /I . /I glob /I w32/include /D NDEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinRel/ /Fp.\WinRel/%make%.pch /Fo.\WinRel/ /c implicit.c
+  echo WinRel\implicit.obj >>link.rel
+  cl.exe /nologo /MT /W4 /GX /YX /O2 /I . /I glob /I w32/include /D NDEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinRel/ /Fp.\WinRel/%make%.pch /Fo.\WinRel/ /c loadapi.c
+***************
+*** 245,255 ****
+  cl.exe /nologo /MT /W4 /GX /YX /O2 /I . /I glob /I w32/include /D NDEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinRel/ /Fp.\WinRel/%make%.pch /Fo.\WinRel/ /c guile.c
+  echo WinRel\guile.obj >>link.rel
+  :LinkRel
+  echo off
+  echo "Linking WinRel/%make%.exe"
+! rem link.exe %GUILELIBS% kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib w32\subproc\winrel\subproc.lib /NOLOGO /SUBSYSTEM:console /INCREMENTAL:no /PDB:.\WinRel/%make%.pdb /OUT:.\WinRel/%make%.exe .\WinRel/variable.obj  .\WinRel/rule.obj  .\WinRel/remote-stub.obj  .\WinRel/commands.obj  .\WinRel/file.obj  .\WinRel/getloadavg.obj  .\WinRel/default.obj  .\WinRel/signame.obj  .\WinRel/expand.obj  .\WinRel/dir.obj  .\WinRel/main.obj  .\WinRel/getopt1.obj  .\WinRel/job.obj  .\WinRel/output.obj  .\WinRel/read.obj  .\WinRel/version.obj  .\WinRel/getopt.obj  .\WinRel/arscan.obj  .\WinRel/remake.obj  .\WinRel/misc.obj  .\WinRel/hash.obj  .\WinRel/strcache.obj  .\WinRel/ar.obj  .\WinRel/function.obj  .\WinRel/vpath.obj  .\WinRel/implicit.obj  .\WinRel/dirent.obj  .\WinRel/glob.obj  .\WinRel/fnmatch.obj  .\WinRel/pathstuff.obj
+  echo %GUILELIBS% kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib w32\subproc\winrel\subproc.lib >>link.rel
+  link.exe /NOLOGO /SUBSYSTEM:console /INCREMENTAL:no /PDB:.\WinRel/%make%.pdb /OUT:.\WinRel/%make%.exe @link.rel
+  if not exist .\WinRel/%make%.exe echo "WinRel build failed"
+  if exist .\WinRel/%make%.exe echo "WinRel build succeeded!"
+  set make=
+--- 249,259 ----
+  cl.exe /nologo /MT /W4 /GX /YX /O2 /I . /I glob /I w32/include /D NDEBUG /D WINDOWS32 /D WIN32 /D _CONSOLE /D HAVE_CONFIG_H /FR.\WinRel/ /Fp.\WinRel/%make%.pch /Fo.\WinRel/ /c guile.c
+  echo WinRel\guile.obj >>link.rel
+  :LinkRel
+  echo off
+  echo "Linking WinRel/%make%.exe"
+! rem link.exe %GUILELIBS% kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib w32\subproc\winrel\subproc.lib /NOLOGO /SUBSYSTEM:console /INCREMENTAL:no /PDB:.\WinRel/%make%.pdb /OUT:.\WinRel/%make%.exe .\WinRel/variable.obj  .\WinRel/rule.obj  .\WinRel/remote-stub.obj  .\WinRel/commands.obj  .\WinRel/file.obj  .\WinRel/getloadavg.obj  .\WinRel/default.obj  .\WinRel/signame.obj  .\WinRel/expand.obj  .\WinRel/dir.obj  .\WinRel/main.obj  .\WinRel/getopt1.obj  .\WinRel/job.obj  .\WinRel/output.obj  .\WinRel/read.obj  .\WinRel/version.obj  .\WinRel/getopt.obj  .\WinRel/arscan.obj  .\WinRel/remake.obj  .\WinRel/misc.obj  .\WinRel/hash.obj  .\WinRel/strcache.obj  .\WinRel/ar.obj  .\WinRel/function.obj .\WinRel/monmakeamoi.obj  .\WinRel/vpath.obj  .\WinRel/implicit.obj  .\WinRel/dirent.obj  .\WinRel/glob.obj  .\WinRel/fnmatch.obj  .\WinRel/pathstuff.obj
+  echo %GUILELIBS% kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib w32\subproc\winrel\subproc.lib >>link.rel
+  link.exe /NOLOGO /SUBSYSTEM:console /INCREMENTAL:no /PDB:.\WinRel/%make%.pdb /OUT:.\WinRel/%make%.exe @link.rel
+  if not exist .\WinRel/%make%.exe echo "WinRel build failed"
+  if exist .\WinRel/%make%.exe echo "WinRel build succeeded!"
+  set make=
+***************
+*** 278,287 ****
+--- 282,292 ----
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c hash.c
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c strcache.c
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c misc.c
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c ar.c
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c function.c
++ gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c monmakeamoi.c
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c vpath.c
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c implicit.c
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c loadapi.c
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c load.c
+  gcc -mthreads -Wall -gdwarf-2 -g3 %OPT% -I. -I./glob -I./w32/include -DWINDOWS32 -DHAVE_CONFIG_H -c ./glob/glob.c -o glob.o
+***************
+*** 297,307 ****
+  :LinkGCC
+  @echo off
+  Rem The version NN of libgnumake-NN.dll.a should be bumped whenever
+  Rem the API changes in binary-incompatible manner.
+  @echo on
+! gcc -mthreads -gdwarf-2 -g3 -o gnumake.exe variable.o rule.o remote-stub.o commands.o file.o getloadavg.o default.o signame.o expand.o dir.o main.o getopt1.o %GUILEOBJ% job.o output.o read.o version.o getopt.o arscan.o remake.o misc.o hash.o strcache.o ar.o function.o vpath.o implicit.o loadapi.o load.o glob.o fnmatch.o pathstuff.o posixfcn.o w32_misc.o sub_proc.o w32err.o %GUILELIBS% -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32 -Wl,--out-implib=libgnumake-1.dll.a
+  @GoTo BuildEnd
+  :Usage
+  echo Usage: %0 [options] [gcc]
+  echo Options:
+  echo.  --debug           For GCC only, make a debug build
+--- 302,312 ----
+  :LinkGCC
+  @echo off
+  Rem The version NN of libgnumake-NN.dll.a should be bumped whenever
+  Rem the API changes in binary-incompatible manner.
+  @echo on
+! gcc -mthreads -gdwarf-2 -g3 -o gnumake.exe variable.o rule.o remote-stub.o commands.o file.o getloadavg.o default.o signame.o expand.o dir.o main.o getopt1.o %GUILEOBJ% job.o output.o read.o version.o getopt.o arscan.o remake.o misc.o hash.o strcache.o ar.o function.o monmakeamoi.o vpath.o implicit.o loadapi.o load.o glob.o fnmatch.o pathstuff.o posixfcn.o w32_misc.o sub_proc.o w32err.o %GUILELIBS% -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32 -Wl,--out-implib=libgnumake-1.dll.a
+  @GoTo BuildEnd
+  :Usage
+  echo Usage: %0 [options] [gcc]
+  echo Options:
+  echo.  --debug           For GCC only, make a debug build
+diff -r -C 5 -x Makefile.in -x '*.texi' -x stamp-vti -x '*.m4' -x configure ./ChangeLog ../mine/ChangeLog
+*** ./ChangeLog	2013-10-09 07:49:38.000000000 +0200
+--- ../mine/ChangeLog	2015-01-28 11:10:46.217021216 +0100
+***************
+*** 1,5 ****
+--- 1,8 ----
++ 2015-01-28 Pierre Lindenbaum @yokofakun
++ 	Mon Make a Moi
++ 
+  2013-10-09  Paul Smith  <psmith@gnu.org>
+  
+  	Version 4.0 released.
+  
+  	* configure.ac: Updated for the release.
+diff -r -C 5 -x Makefile.in -x '*.texi' -x stamp-vti -x '*.m4' -x configure ./config.h.in ../mine/config.h.in
+*** ./config.h.in	2013-10-09 08:11:52.000000000 +0200
+--- ../mine/config.h.in	2015-01-28 11:18:10.655225073 +0100
+***************
+*** 424,438 ****
+  #undef WINDOWS32
+  
+  /* Define if using the dmalloc debugging malloc package */
+  #undef WITH_DMALLOC
+  
+- /* Enable large inode numbers on Mac OS X 10.5.  */
+- #ifndef _DARWIN_USE_64_BIT_INODE
+- # define _DARWIN_USE_64_BIT_INODE 1
+- #endif
+- 
+  /* Number of bits in a file offset, on hosts where this is settable. */
+  #undef _FILE_OFFSET_BITS
+  
+  /* Define for large files, on AIX-style hosts. */
+  #undef _LARGE_FILES
+--- 424,433 ----
+diff -r -C 5 -x Makefile.in -x '*.texi' -x stamp-vti -x '*.m4' -x configure ./dosbuild.bat ../mine/dosbuild.bat
+*** ./dosbuild.bat	2013-10-06 01:12:18.000000000 +0200
+--- ../mine/dosbuild.bat	2015-01-28 11:11:27.993228381 +0100
+***************
+*** 32,41 ****
+--- 32,42 ----
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g implicit.c -o implicit.o
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g default.c -o default.o
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g variable.c -o variable.o
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g expand.c -o expand.o
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g function.c -o function.o
++ gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g monmakeamoi.c -o monmakeamoi.o
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g vpath.c -o vpath.o
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g hash.c -o hash.o
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g strcache.c -o strcache.o
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g version.c -o version.o
+  gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g ar.c -o ar.o
+***************
+*** 51,61 ****
+  ar rv libglob.a glob.o fnmatch.o
+  @echo off
+  cd ..
+  echo commands.o > respf.$$$
+  for %%f in (job output dir file misc main read remake rule implicit default variable) do echo %%f.o >> respf.$$$
+! for %%f in (expand function vpath hash strcache version ar arscan signame remote-stub getopt getopt1) do echo %%f.o >> respf.$$$
+  echo glob/libglob.a >> respf.$$$
+  rem gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g guile.c -o guile.o
+  rem echo guile.o >> respf.$$$
+  @echo Linking...
+  @echo on
+--- 52,62 ----
+  ar rv libglob.a glob.o fnmatch.o
+  @echo off
+  cd ..
+  echo commands.o > respf.$$$
+  for %%f in (job output dir file misc main read remake rule implicit default variable) do echo %%f.o >> respf.$$$
+! for %%f in (expand function monmakeamoi vpath hash strcache version ar arscan signame remote-stub getopt getopt1) do echo %%f.o >> respf.$$$
+  echo glob/libglob.a >> respf.$$$
+  rem gcc  -c -I. -I./glob -DHAVE_CONFIG_H -O2 -g guile.c -o guile.o
+  rem echo guile.o >> respf.$$$
+  @echo Linking...
+  @echo on
+diff -r -C 5 -x Makefile.in -x '*.texi' -x stamp-vti -x '*.m4' -x configure ./function.c ../mine/function.c
+*** ./function.c	2013-10-09 06:22:40.000000000 +0200
+--- ../mine/function.c	2015-01-28 11:27:42.642061404 +0100
+***************
+*** 19,28 ****
+--- 19,29 ----
+  #include "variable.h"
+  #include "dep.h"
+  #include "job.h"
+  #include "commands.h"
+  #include "debug.h"
++ #include "monmakeamoi.h"
+  
+  #ifdef _AMIGA
+  #include "amiga.h"
+  #endif
+  
+***************
+*** 2259,2268 ****
+--- 2260,2270 ----
+    FT_ENTRY ("file",          1,  2,  1,  func_file),
+  #ifdef EXPERIMENTAL
+    FT_ENTRY ("eq",            2,  2,  1,  func_eq),
+    FT_ENTRY ("not",           0,  1,  1,  func_not),
+  #endif
++ MON_MAKE_A_MOI_FUNCTION_TABLE
+  };
+  
+  #define FUNCTION_TABLE_ENTRIES (sizeof (function_table_init) / sizeof (struct function_table_entry))
+  
+  
+diff -r -C 5 -x Makefile.in -x '*.texi' -x stamp-vti -x '*.m4' -x configure ./Makefile.am ../mine/Makefile.am
+*** ./Makefile.am	2013-10-06 01:12:24.000000000 +0200
+--- ../mine/Makefile.am	2015-01-28 11:12:12.673449947 +0100
+***************
+*** 38,48 ****
+  else
+    remote =	remote-stub.c
+  endif
+  
+  make_SOURCES =	ar.c arscan.c commands.c default.c dir.c expand.c file.c \
+! 		function.c getopt.c getopt1.c implicit.c job.c load.c \
+  		loadapi.c main.c misc.c output.c read.c remake.c rule.c \
+  		signame.c strcache.c variable.c version.c vpath.c hash.c \
+  		$(remote)
+  
+  if HAVE_GUILE
+--- 38,48 ----
+  else
+    remote =	remote-stub.c
+  endif
+  
+  make_SOURCES =	ar.c arscan.c commands.c default.c dir.c expand.c file.c \
+! 		function.c monomakeamoi.c getopt.c getopt1.c implicit.c job.c load.c \
+  		loadapi.c main.c misc.c output.c read.c remake.c rule.c \
+  		signame.c strcache.c variable.c version.c vpath.c hash.c \
+  		$(remote)
+  
+  if HAVE_GUILE
+diff -r -C 5 -x Makefile.in -x '*.texi' -x stamp-vti -x '*.m4' -x configure ./Makefile.ami ../mine/Makefile.ami
+*** ./Makefile.ami	2013-10-06 01:12:18.000000000 +0200
+--- ../mine/Makefile.ami	2015-01-28 11:13:22.921798278 +0100
+***************
+*** 118,136 ****
+  CTAGS = ctags -w
+  
+  #guile = guile.o
+  
+  objs = commands.o job.o dir.o file.o misc.o main.o read.o remake.o   \
+!        rule.o implicit.o default.o variable.o expand.o function.o    \
+         vpath.o version.o ar.o arscan.o signame.o strcache.o hash.o   \
+         remote-$(REMOTE).o $(GETOPT) $(ALLOCA) $(extras) $(guile)
+  
+  srcs = $(srcdir)commands.c $(srcdir)job.c $(srcdir)dir.c             \
+         $(srcdir)file.c $(srcdir)getloadavg.c $(srcdir)misc.c         \
+         $(srcdir)main.c $(srcdir)read.c $(srcdir)remake.c             \
+         $(srcdir)rule.c $(srcdir)implicit.c $(srcdir)default.c        \
+!        $(srcdir)variable.c $(srcdir)expand.c $(srcdir)function.c     \
+         $(srcdir)vpath.c $(srcdir)version.c $(srcdir)hash.c           \
+         $(srcdir)guile.c $(srcdir)remote-$(REMOTE).c                  \
+         $(srcdir)ar.c $(srcdir)arscan.c $(srcdir)strcache.c           \
+         $(srcdir)signame.c $(srcdir)signame.h $(GETOPT_SRC)           \
+         $(srcdir)commands.h $(srcdir)dep.h $(srcdir)filedep.h         \
+--- 118,136 ----
+  CTAGS = ctags -w
+  
+  #guile = guile.o
+  
+  objs = commands.o job.o dir.o file.o misc.o main.o read.o remake.o   \
+!        rule.o implicit.o default.o variable.o expand.o function.o monmakeamoi.o   \
+         vpath.o version.o ar.o arscan.o signame.o strcache.o hash.o   \
+         remote-$(REMOTE).o $(GETOPT) $(ALLOCA) $(extras) $(guile)
+  
+  srcs = $(srcdir)commands.c $(srcdir)job.c $(srcdir)dir.c             \
+         $(srcdir)file.c $(srcdir)getloadavg.c $(srcdir)misc.c         \
+         $(srcdir)main.c $(srcdir)read.c $(srcdir)remake.c             \
+         $(srcdir)rule.c $(srcdir)implicit.c $(srcdir)default.c        \
+!        $(srcdir)variable.c $(srcdir)expand.c $(srcdir)function.c monmakeamoi.c    \
+         $(srcdir)vpath.c $(srcdir)version.c $(srcdir)hash.c           \
+         $(srcdir)guile.c $(srcdir)remote-$(REMOTE).c                  \
+         $(srcdir)ar.c $(srcdir)arscan.c $(srcdir)strcache.c           \
+         $(srcdir)signame.c $(srcdir)signame.h $(GETOPT_SRC)           \
+         $(srcdir)commands.h $(srcdir)dep.h $(srcdir)filedep.h         \
+***************
+*** 292,302 ****
+   variable.h
+  variable.o: variable.c makeint.h dep.h filedef.h job.h commands.h \
+   variable.h
+  expand.o: expand.c makeint.h filedef.h job.h commands.h variable.h
+  function.o: function.c makeint.h filedef.h variable.h dep.h job.h \
+!  commands.h amiga.h
+  vpath.o: vpath.c makeint.h filedef.h variable.h
+  strcache.o: strcache.c makeint.h hash.h
+  version.o: version.c
+  ar.o: ar.c makeint.h filedef.h dep.h
+  arscan.o: arscan.c makeint.h
+--- 292,304 ----
+   variable.h
+  variable.o: variable.c makeint.h dep.h filedef.h job.h commands.h \
+   variable.h
+  expand.o: expand.c makeint.h filedef.h job.h commands.h variable.h
+  function.o: function.c makeint.h filedef.h variable.h dep.h job.h \
+!  commands.h amiga.h monmakeamoi.h
+! monmakeamoi.o: function.c makeint.h filedef.h variable.h dep.h job.h \
+!  commands.h amiga.h monmakeamoi.h
+  vpath.o: vpath.c makeint.h filedef.h variable.h
+  strcache.o: strcache.c makeint.h hash.h
+  version.o: version.c
+  ar.o: ar.c makeint.h filedef.h dep.h
+  arscan.o: arscan.c makeint.h
+diff -r -C 5 -x Makefile.in -x '*.texi' -x stamp-vti -x '*.m4' -x configure ./makefile.vms ../mine/makefile.vms
+*** ./makefile.vms	2013-10-06 01:12:18.000000000 +0200
+--- ../mine/makefile.vms	2015-01-28 11:14:52.610243018 +0100
+***************
+*** 90,106 ****
+  
+  #guile = ,guile.obj
+  
+  objs = commands.obj,job.obj,output.obj,dir.obj,file.obj,misc.obj,hash.obj,\
+         load.obj,main.obj,read.obj,remake.obj,rule.obj,implicit.obj,\
+!        default.obj,variable.obj,expand.obj,function.obj,strcache.obj,\
+         vpath.obj,version.obj\
+         $(ARCHIVES)$(ALLOCA)$(extras)$(getopt)$(glob)$(guile)
+  
+  srcs = commands.c job.c output.c dir.c file.c misc.c guile.c hash.c \
+  	load.c main.c read.c remake.c rule.c implicit.c \
+! 	default.c variable.c expand.c function.c strcache.c \
+  	vpath.c version.c vmsfunctions.c vmsify.c $(ARCHIVES_SRC) $(ALLOCASRC) \
+  	commands.h dep.h filedef.h job.h output.h makeint.h rule.h variable.h
+  
+  
+  .PHONY: all doc
+--- 90,106 ----
+  
+  #guile = ,guile.obj
+  
+  objs = commands.obj,job.obj,output.obj,dir.obj,file.obj,misc.obj,hash.obj,\
+         load.obj,main.obj,read.obj,remake.obj,rule.obj,implicit.obj,\
+!        default.obj,variable.obj,expand.obj,function.obj,monmakeamoi.obj,strcache.obj,\
+         vpath.obj,version.obj\
+         $(ARCHIVES)$(ALLOCA)$(extras)$(getopt)$(glob)$(guile)
+  
+  srcs = commands.c job.c output.c dir.c file.c misc.c guile.c hash.c \
+  	load.c main.c read.c remake.c rule.c implicit.c \
+! 	default.c variable.c expand.c function.c monmakeamoi.c strcache.c \
+  	vpath.c version.c vmsfunctions.c vmsify.c $(ARCHIVES_SRC) $(ALLOCASRC) \
+  	commands.h dep.h filedef.h job.h output.h makeint.h rule.h variable.h
+  
+  
+  .PHONY: all doc
+***************
+*** 126,136 ****
+  commands.obj: commands.c makeint.h dep.h commands.h filedef.h variable.h job.h
+  default.obj: default.c makeint.h rule.h dep.h job.h filedef.h commands.h variable.h
+  dir.obj: dir.c makeint.h hash.h [.glob]glob.h
+  expand.obj: expand.c makeint.h commands.h filedef.h job.h rule.h variable.h
+  file.obj: file.c makeint.h commands.h dep.h filedef.h variable.h job.h debug.h
+! function.obj: function.c makeint.h variable.h dep.h commands.h filedef.h debug.h job.h
+  getopt.obj: getopt.c getopt.h config.h gettext.h
+  getopt1.obj: getopt1.c getopt.h config.h
+  guile.obj: guile.c makeint.h debug.h dep.h gmk-default.h
+  hash.obj: hash.c makeint.h hash.h
+  implicit.obj: implicit.c makeint.h rule.h dep.h filedef.h debug.h variable.h job.h commands.h
+--- 126,137 ----
+  commands.obj: commands.c makeint.h dep.h commands.h filedef.h variable.h job.h
+  default.obj: default.c makeint.h rule.h dep.h job.h filedef.h commands.h variable.h
+  dir.obj: dir.c makeint.h hash.h [.glob]glob.h
+  expand.obj: expand.c makeint.h commands.h filedef.h job.h rule.h variable.h
+  file.obj: file.c makeint.h commands.h dep.h filedef.h variable.h job.h debug.h
+! function.obj: function.c monmakeamoi.h makeint.h variable.h dep.h commands.h filedef.h debug.h job.h
+! monmakeamoi.obj: monmakeamoi.c monmakeamoi.h makeint.h variable.h dep.h commands.h filedef.h debug.h job.h
+  getopt.obj: getopt.c getopt.h config.h gettext.h
+  getopt1.obj: getopt1.c getopt.h config.h
+  guile.obj: guile.c makeint.h debug.h dep.h gmk-default.h
+  hash.obj: hash.c makeint.h hash.h
+  implicit.obj: implicit.c makeint.h rule.h dep.h filedef.h debug.h variable.h job.h commands.h

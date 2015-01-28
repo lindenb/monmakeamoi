@@ -1,0 +1,31 @@
+*** gnumake/make-4.1-original/function.c	2014-10-05 18:24:51.000000000 +0200
+--- gnumake/make-4.1-patched/function.c	2015-01-28 15:40:47.694971423 +0100
+***************
+*** 20,29 ****
+--- 20,31 ----
+  #include "dep.h"
+  #include "job.h"
+  #include "commands.h"
+  #include "debug.h"
+  
++ #include "monmakeamoi.h"
++ 
+  #ifdef _AMIGA
+  #include "amiga.h"
+  #endif
+  
+  
+***************
+*** 2304,2313 ****
+--- 2306,2316 ----
+    FT_ENTRY ("file",          1,  2,  1,  func_file),
+  #ifdef EXPERIMENTAL
+    FT_ENTRY ("eq",            2,  2,  1,  func_eq),
+    FT_ENTRY ("not",           0,  1,  1,  func_not),
+  #endif
++ MON_MAKE_A_MOI_FUNCTION_TABLE
+  };
+  
+  #define FUNCTION_TABLE_ENTRIES (sizeof (function_table_init) / sizeof (struct function_table_entry))
+  
+  
