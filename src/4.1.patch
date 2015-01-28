@@ -29,3 +29,67 @@
   #define FUNCTION_TABLE_ENTRIES (sizeof (function_table_init) / sizeof (struct function_table_entry))
   
   
+*** gnumake/make-4.1-original/Makefile.am	2014-10-05 18:24:51.000000000 +0200
+--- gnumake/make-4.1-patched/Makefile.am	2015-01-28 15:37:52.334101851 +0100
+***************
+*** 31,40 ****
+--- 31,42 ----
+  SUBDIRS =	glob config po doc $(MAYBE_W32)
+  
+  bin_PROGRAMS =	make
+  include_HEADERS = gnumake.h
+  
++ 
++ 
+  if USE_CUSTOMS
+    remote =	remote-cstms.c
+  else
+    remote =	remote-stub.c
+  endif
+***************
+*** 49,70 ****
+  
+  noinst_HEADERS = commands.h dep.h filedef.h job.h makeint.h rule.h variable.h \
+  		debug.h getopt.h gettext.h hash.h output.h
+  
+  make_LDADD =	@LIBOBJS@ @ALLOCA@ $(GLOBLIB) @GETLOADAVG_LIBS@ @LIBINTL@ \
+! 		$(GUILE_LIBS)
+  # Only process if target is MS-Windows
+  if WINDOWSENV
+      make_LDADD += $(W32LIB)
+  endif
+  
+  man_MANS =	make.1
+  
+  DEFS =		-DLOCALEDIR=\"$(localedir)\" -DLIBDIR=\"$(libdir)\" -DINCLUDEDIR=\"$(includedir)\" @DEFS@
+  
+  AM_CPPFLAGS =	$(GLOBINC)
+! AM_CFLAGS =	$(GUILE_CFLAGS)
+  # Only process if target is MS-Windows
+  if WINDOWSENV
+      AM_CPPFLAGS +=	$(W32INC)
+  endif
+  
+--- 51,72 ----
+  
+  noinst_HEADERS = commands.h dep.h filedef.h job.h makeint.h rule.h variable.h \
+  		debug.h getopt.h gettext.h hash.h output.h
+  
+  make_LDADD =	@LIBOBJS@ @ALLOCA@ $(GLOBLIB) @GETLOADAVG_LIBS@ @LIBINTL@ \
+! 		../../src/monmakeamoi.a $(GUILE_LIBS)
+  # Only process if target is MS-Windows
+  if WINDOWSENV
+      make_LDADD += $(W32LIB)
+  endif
+  
+  man_MANS =	make.1
+  
+  DEFS =		-DLOCALEDIR=\"$(localedir)\" -DLIBDIR=\"$(libdir)\" -DINCLUDEDIR=\"$(includedir)\" @DEFS@
+  
+  AM_CPPFLAGS =	$(GLOBINC)
+! AM_CFLAGS =	-I../../src $(GUILE_CFLAGS)
+  # Only process if target is MS-Windows
+  if WINDOWSENV
+      AM_CPPFLAGS +=	$(W32INC)
+  endif
+  
