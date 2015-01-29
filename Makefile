@@ -1,11 +1,14 @@
 export GNU_MAKE_VERSION=4.1
 
-.PHONY: all clean patch tests  src/monmakeamoi.a
+.PHONY: all clean patch tests  src/monmakeamoi.a precompile
 
 all : tests
 
 tests: dist/bin/monmakeamoi-${GNU_MAKE_VERSION}
 	$(realpath $<) -C tests
+
+precompile : src/monmakeamoi.a
+	@echo -n  "*********\n*\n* You can now 'cd' to $(realpath gnumake/make-${GNU_MAKE_VERSION}-patched ) and\n* run ./configure to make and install the patched version of MAKE\n*\n*********\n"
 
 dist/bin/monmakeamoi-${GNU_MAKE_VERSION} : src/monmakeamoi.a
 	$(MAKE) -C gnumake/make-${GNU_MAKE_VERSION}-patched make && \
@@ -46,4 +49,4 @@ src/${GNU_MAKE_VERSION}.patch.tmp : $(addprefix gnumake/make-${GNU_MAKE_VERSION}
 	@echo "You can now copy $@ to $(basename $@)"
 
 clean:
-	rm -rf gnumake dist
+	rm -rf gnumake dist tests/*.txt
