@@ -33,6 +33,17 @@ To only prepare a patched version, with a  `.configure` file:
 $ make precompile
 ```
 
+# New Option
+
+## STOP-FILE
+
+```
+--stop-file=[FILE]
+```
+
+if *FILE* is present, Make will wait for the end of current jobs but will not start new jobs.
+
+
 # New variables
 
 ## MAKE_JOB_SLOTS
